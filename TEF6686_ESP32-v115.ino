@@ -170,7 +170,8 @@
 #include <TFT_eSPI.h>         // https://github.com/Bodmer/TFT_eSPI
 #include <RotaryEncoder.h>    // https://github.com/enjoyneering/RotaryEncoder
 
-#define TFT_GREYOUT     0x38E7
+#define TFT_GREYOUT     0x5000
+#define TFT_DARKREDSTEP    0x09DEE1
 #define ROTARY_PIN_A    34
 #define ROTARY_PIN_B    36
 #define ROTARY_BUTTON   39
@@ -491,7 +492,7 @@ void setup() {
   tft.pushImage (239, 200, 80, 30, nxplogo);
   tft.setTextColor(TFT_SKYBLUE);
   tft.drawCentreString("FM/AM receiver", 160, 10, 4);
-  tft.setTextColor(TFT_YELLOW);
+  tft.setTextColor(TFT_SILVER);
   tft.drawCentreString("Software " + String(VERSION), 160, 30, 2);
   tft.setTextColor(TFT_WHITE);
   tft.drawString("Lithio", 260, 180, 2);
@@ -552,7 +553,7 @@ void loop() {
     if (SStatus / 10 > LowLevelSet && LowLevelInit == false && menu == false && band == 0) {
       radio.clearRDS();
       if (screenmute == false) {
-        tft.setTextColor(TFT_WHITE);
+        tft.setTextColor(TFT_DARKGREY);
         tft.drawString("20", 20, 153, 1);
         tft.drawString("40", 50, 153, 1);
         tft.drawString("60", 80, 153, 1);
@@ -707,7 +708,7 @@ void loop() {
               tft.print(SStatusold % 10);
             }
 
-            tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+            tft.setTextColor(TFT_SILVER, TFT_BLACK);
             if (SStatus >= 0) {
               if (count.length() == 1) {
                 tft.setCursor (100, 140);
@@ -993,16 +994,16 @@ void ShowStepSize() {
     tft.fillRect(162, 38, 15, 4, TFT_GREYOUT);
   }
   if (stepsize == 1) {
-    tft.fillRect(224, 38, 15, 4, TFT_GREEN);
+    tft.fillRect(224, 38, 15, 4, TFT_DARKREDSTEP);
   }
   if (stepsize == 2) {
-    tft.fillRect(193, 38, 15, 4, TFT_GREEN);
+    tft.fillRect(193, 38, 15, 4, TFT_DARKREDSTEP);
   }
   if (stepsize == 3) {
     if (band == 0) {
-      tft.fillRect(148, 38, 15, 4, TFT_GREEN);
+      tft.fillRect(148, 38, 15, 4, TFT_DARKREDSTEP);
     } else {
-      tft.fillRect(162, 38, 15, 4, TFT_GREEN);
+      tft.fillRect(162, 38, 15, 4, TFT_DARKREDSTEP);
     }
   }
 }
@@ -1114,7 +1115,7 @@ void ButtonPress() {
           } else {
             VolString = String(VolSet, DEC);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           tft.drawRightString(VolString, 165, 110, 4);
           break;
 
@@ -1122,7 +1123,7 @@ void ButtonPress() {
           tft.setTextColor(TFT_WHITE);
           tft.drawCentreString("Converter:", 150, 70, 4);
           tft.drawString("MHz", 170, 110, 4);
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
 
           ConverterString = String(ConverterSet, DEC);
           tft.drawRightString(ConverterString, 165, 110, 4);
@@ -1132,7 +1133,7 @@ void ButtonPress() {
           tft.setTextColor(TFT_WHITE);
           tft.drawCentreString("Low bandedge:", 150, 70, 4);
           tft.drawString("MHz", 170, 110, 4);
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           LowEdgeString = String(LowEdgeSet + ConverterSet, DEC);
           tft.drawRightString(LowEdgeString, 165, 110, 4);
           break;
@@ -1141,7 +1142,7 @@ void ButtonPress() {
           tft.setTextColor(TFT_WHITE);
           tft.drawCentreString("High bandedge:", 150, 70, 4);
           tft.drawString("MHz", 170, 110, 4);
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           HighEdgeString = String(HighEdgeSet + ConverterSet, DEC);
           tft.drawRightString(HighEdgeString, 165, 110, 4);
           break;
@@ -1156,7 +1157,7 @@ void ButtonPress() {
           } else {
             LevelOffsetString = String(LevelOffset, DEC);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           tft.drawRightString(LevelOffsetString, 165, 110, 4);
           SStatusold = 2000;
           change2 = true;
@@ -1168,7 +1169,7 @@ void ButtonPress() {
           if (StereoLevel != 0) {
             tft.drawString("dBuV", 170, 110, 4);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           if (StereoLevel != 0) {
             StereoLevelString = String(StereoLevel, DEC);
           } else {
@@ -1183,7 +1184,7 @@ void ButtonPress() {
           if (HighCutLevel != 0) {
             tft.drawString("Hz", 170, 110, 4);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           if (HighCutLevel != 0) {
             HighCutLevelString = String(HighCutLevel * 100, DEC);
           } else {
@@ -1198,7 +1199,7 @@ void ButtonPress() {
           if (HighCutOffset != 0) {
             tft.drawString("dBuV", 170, 110, 4);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           if (HighCutOffset != 0) {
             HighCutOffsetString = String(HighCutOffset, DEC);
           } else {
@@ -1211,7 +1212,7 @@ void ButtonPress() {
           tft.setTextColor(TFT_WHITE);
           tft.drawCentreString("Low level threshold:", 150, 70, 4);
           tft.drawString("dBuV", 150, 110, 4);
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           LowLevelString = String(LowLevelSet, DEC);
           tft.drawRightString(LowLevelString, 145, 110, 4);
           break;
@@ -1220,7 +1221,7 @@ void ButtonPress() {
           tft.setTextColor(TFT_WHITE);
           tft.drawCentreString("Contrast:", 150, 70, 4);
           tft.drawString("%", 170, 110, 4);
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           ContrastString = String(ContrastSet, DEC);
           tft.drawRightString(ContrastString, 165, 110, 4);
           break;
@@ -1282,7 +1283,7 @@ void KeyUp() {
           if (VolSet > 10) {
             VolSet = 10;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           if (VolSet > 0) {
             VolString = (String)"+" + VolSet, DEC;
           } else {
@@ -1310,7 +1311,7 @@ void KeyUp() {
             Wire.write(ConverterSet & (0xFF));
             Wire.endTransmission();
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           ConverterString = String(ConverterSet, DEC);
           tft.drawRightString(ConverterString, 165, 110, 4);
           break;
@@ -1323,7 +1324,7 @@ void KeyUp() {
           if (LowEdgeSet > 107) {
             LowEdgeSet = 65;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           LowEdgeString = String(LowEdgeSet + ConverterSet, DEC);
           tft.drawRightString(LowEdgeString, 165, 110, 4);
           break;
@@ -1336,7 +1337,7 @@ void KeyUp() {
           if (HighEdgeSet > 108) {
             HighEdgeSet = 66;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           HighEdgeString = String(HighEdgeSet + ConverterSet, DEC);
           tft.drawRightString(HighEdgeString, 165, 110, 4);
           break;
@@ -1353,7 +1354,7 @@ void KeyUp() {
           if (LevelOffset > 15) {
             LevelOffset = -25;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           if (LevelOffset > 0) {
             LevelOffsetString = (String)"+" + LevelOffset, DEC;
           } else {
@@ -1388,7 +1389,7 @@ void KeyUp() {
           if (StereoLevel != 0) {
             tft.drawString("dBuV", 170, 110, 4);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           tft.drawRightString(StereoLevelString, 165, 110, 4);
           radio.setStereoLevel(StereoLevel);
           break;
@@ -1402,7 +1403,7 @@ void KeyUp() {
             HighCutLevel = 15;
           }
           HighCutLevelString = String(HighCutLevel * 100, DEC);
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           tft.drawRightString(HighCutLevelString, 165, 110, 4);
           radio.setHighCutLevel(HighCutLevel);
           break;
@@ -1431,7 +1432,7 @@ void KeyUp() {
           if (HighCutOffset != 0) {
             tft.drawString("dBuV", 170, 110, 4);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           tft.drawRightString(HighCutOffsetString, 165, 110, 4);
           radio.setHighCutOffset(HighCutOffset);
           break;
@@ -1444,7 +1445,7 @@ void KeyUp() {
           if (LowLevelSet > 40 || LowLevelSet <= 0) {
             LowLevelSet = 0;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           LowLevelString = String(LowLevelSet, DEC);
           tft.drawRightString(LowLevelString, 145, 110, 4);
           break;
@@ -1457,7 +1458,7 @@ void KeyUp() {
           if (ContrastSet > 100) {
             ContrastSet = 1;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           ContrastString = String(ContrastSet, DEC);
           tft.drawRightString(ContrastString, 165, 110, 4);
           analogWrite(CONTRASTPIN, ContrastSet * 2 + 27);
@@ -1522,7 +1523,7 @@ void KeyDown() {
           if (VolSet < -10) {
             VolSet = -10;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           if (VolSet > 0) {
             VolString = (String)"+" + VolSet, DEC;
           } else {
@@ -1550,7 +1551,7 @@ void KeyDown() {
             Wire.write(ConverterSet & (0xFF));
             Wire.endTransmission();
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           ConverterString = String(ConverterSet, DEC);
           tft.drawRightString(ConverterString, 165, 110, 4);
           break;
@@ -1563,7 +1564,7 @@ void KeyDown() {
           if (LowEdgeSet < 65) {
             LowEdgeSet = 107;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           LowEdgeString = String(LowEdgeSet + ConverterSet, DEC);
           tft.drawRightString(LowEdgeString, 165, 110, 4);
           break;
@@ -1576,7 +1577,7 @@ void KeyDown() {
           if (HighEdgeSet < 66) {
             HighEdgeSet = 108;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           HighEdgeString = String(HighEdgeSet + ConverterSet, DEC);
           tft.drawRightString(HighEdgeString, 165, 110, 4);
           break;
@@ -1593,7 +1594,7 @@ void KeyDown() {
           if (LevelOffset < -25) {
             LevelOffset = 15;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           if (LevelOffset > 0) {
             LevelOffsetString = (String)"+" + LevelOffset, DEC;
           } else {
@@ -1629,7 +1630,7 @@ void KeyDown() {
           if (StereoLevel != 0) {
             tft.drawString("dBuV", 170, 110, 4);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           tft.drawRightString(StereoLevelString, 165, 110, 4);
           radio.setStereoLevel(StereoLevel);
           break;
@@ -1643,7 +1644,7 @@ void KeyDown() {
             HighCutLevel = 70;
           }
           HighCutLevelString = String(HighCutLevel * 100, DEC);
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           tft.drawRightString(HighCutLevelString, 165, 110, 4);
           radio.setHighCutLevel(HighCutLevel);
           break;
@@ -1673,7 +1674,7 @@ void KeyDown() {
           if (HighCutOffset != 0) {
             tft.drawString("dBuV", 170, 110, 4);
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           tft.drawRightString(HighCutOffsetString, 165, 110, 4);
           radio.setHighCutOffset(HighCutOffset);
           break;
@@ -1686,7 +1687,7 @@ void KeyDown() {
           if (LowLevelSet > 40) {
             LowLevelSet = 40;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           LowLevelString = String(LowLevelSet, DEC);
           tft.drawRightString(LowLevelString, 145, 110, 4);
           break;
@@ -1700,7 +1701,7 @@ void KeyDown() {
           if (ContrastSet < 1) {
             ContrastSet = 100;
           }
-          tft.setTextColor(TFT_YELLOW);
+          tft.setTextColor(TFT_SILVER);
           ContrastString = String(ContrastSet, DEC);
           tft.drawRightString(ContrastString, 165, 110, 4);
           analogWrite(CONTRASTPIN, ContrastSet * 2 + 27);
@@ -1754,7 +1755,7 @@ void showPI() {
   if ((RDSstatus == 1) && !strcmp(rdsInfo.programId, radioIdPrevious, 4)) {
     tft.setTextColor(TFT_BLACK);
     tft.drawString(PIold, 244, 192, 4);
-    tft.setTextColor(TFT_YELLOW);
+    tft.setTextColor(TFT_SILVER);
     tft.drawString(rdsInfo.programId, 244, 192, 4);
     PIold = rdsInfo.programId;
     strcpy(radioIdPrevious, rdsInfo.programId);
@@ -1765,7 +1766,7 @@ void showPTY() {
   if ((RDSstatus == 1) && !strcmp(rdsInfo.programType, programTypePrevious, 16)) {
     tft.setTextColor(TFT_BLACK);
     tft.drawString(PTYold, 38, 168, 2);
-    tft.setTextColor(TFT_YELLOW);
+    tft.setTextColor(TFT_SILVER);
     tft.drawString(rdsInfo.programType, 38, 168, 2);
     PTYold = rdsInfo.programType;
     strcpy(programTypePrevious, rdsInfo.programType);
@@ -1777,7 +1778,7 @@ void showPS() {
     if ((RDSstatus == 1) && (strlen(rdsInfo.programService) == 8) && !strcmp(rdsInfo.programService, programServicePrevious, 8)) {
       tft.setTextColor(TFT_BLACK);
       tft.drawString(PSold, 38, 192, 4);
-      tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+      tft.setTextColor(TFT_SILVER, TFT_BLACK);
       tft.drawString(rdsInfo.programService, 38, 192, 4);
       PSold = rdsInfo.programService;
       strcpy(programServicePrevious, rdsInfo.programService);
@@ -1790,9 +1791,9 @@ void showRadioText() {
   if ((RDSstatus == 1) && !strcmp(rdsInfo.radioText, radioTextPrevious, 65)) {
     tft.setTextColor(TFT_BLACK);
     tft.drawString(RTold, 6, 222, 2);
-    tft.setTextColor(TFT_YELLOW);
+    tft.setTextColor(TFT_SILVER);
     tft.drawString(rdsInfo.radioText, 6, 222, 2);
-    tft.drawRect(0, 0, 320, 240, TFT_BLUE);
+    tft.drawRect(0, 0, 320, 240, TFT_DARKRED);
     RTold = rdsInfo.radioText;
     strcpy(radioTextPrevious, rdsInfo.radioText);
   }
@@ -1809,8 +1810,8 @@ bool strcmp(char* str1, char* str2, int length) {
 
 void BuildMenu() {
   tft.fillScreen(TFT_BLACK);
-  tft.drawRect(0, 0, 320, 240, TFT_BLUE);
-  tft.drawLine(0, 23, 320, 23, TFT_BLUE);
+  tft.drawRect(0, 0, 320, 240, TFT_DARKRED);
+  tft.drawLine(0, 23, 320, 23, TFT_DARKRED);
   tft.setTextColor(TFT_SKYBLUE);
   tft.drawString("PRESS MODE TO EXIT AND STORE", 20, 4, 2);
   tft.setTextColor(TFT_WHITE);
@@ -1875,7 +1876,7 @@ void BuildMenu() {
   } else {
     HighCutOffsetString = String("Off");
   }
-  tft.setTextColor(TFT_YELLOW);
+  tft.setTextColor(TFT_SILVER);
   tft.drawRightString(VolString, 270, 30, 2);
   tft.drawRightString(ConverterString, 270, 50, 2);
   tft.drawRightString(LowEdgeString, 270, 70, 2);
@@ -1899,7 +1900,7 @@ void MuteScreen(int setting)
   } else {
     screenmute = 1;
     tft.fillScreen(TFT_BLACK);
-    tft.drawRect(0, 0, 320, 240, TFT_BLUE);
+    tft.drawRect(0, 0, 320, 240, TFT_DARKRED);
     tft.setTextColor(TFT_WHITE);
     tft.drawCentreString("Screen is muted!", 160, 30, 4);
     tft.drawCentreString("To unmute uncheck RF+ box", 160, 60, 2);
@@ -1909,17 +1910,17 @@ void MuteScreen(int setting)
 void BuildDisplay()
 {
   tft.fillScreen(TFT_BLACK);
-  tft.drawRect(0, 0, 320, 240, TFT_BLUE);
-  tft.drawLine(0, 30, 320, 30, TFT_BLUE);
-  tft.drawLine(0, 100, 320, 100, TFT_BLUE);
-  tft.drawLine(64, 30, 64, 0, TFT_BLUE);
-  tft.drawLine(210, 100, 210, 218, TFT_BLUE);
-  tft.drawLine(268, 30, 268, 0, TFT_BLUE);
-  tft.drawLine(0, 165, 210, 165, TFT_BLUE);
-  tft.drawLine(0, 187, 320, 187, TFT_BLUE);
-  tft.drawLine(0, 218, 320, 218, TFT_BLUE);
-  tft.drawLine(108, 30, 108, 0, TFT_BLUE);
-  tft.drawLine(174, 30, 174, 0, TFT_BLUE);
+  tft.drawRect(0, 0, 320, 240, TFT_DARKRED);
+  tft.drawLine(0, 30, 320, 30, TFT_DARKRED);
+  tft.drawLine(0, 100, 320, 100, TFT_DARKRED);
+  tft.drawLine(64, 30, 64, 0, TFT_DARKRED);
+  tft.drawLine(210, 100, 210, 218, TFT_DARKRED);
+  tft.drawLine(268, 30, 268, 0, TFT_DARKRED);
+  tft.drawLine(0, 165, 210, 165, TFT_DARKRED);
+  tft.drawLine(0, 187, 320, 187, TFT_DARKRED);
+  tft.drawLine(0, 218, 320, 218, TFT_DARKRED);
+  tft.drawLine(108, 30, 108, 0, TFT_DARKRED);
+  tft.drawLine(174, 30, 174, 0, TFT_DARKRED);
   tft.drawLine(20, 120, 200, 120, TFT_DARKGREY);
   tft.drawLine(20, 150, 200, 150, TFT_DARKGREY);
   for (uint16_t segments = 0; segments < 94; segments++) {
@@ -1931,7 +1932,7 @@ void BuildDisplay()
         tft.fillRect(16 + (2 * segments), 117, 2, 3, TFT_GREEN);
     }
   }
-  tft.setTextColor(TFT_WHITE);
+  tft.setTextColor(TFT_DARKGREY);
   tft.drawString("SQ:", 216, 155, 2);
   tft.drawString("S/N", 250, 168, 2);
   tft.drawString("dB",  300, 168, 2);
@@ -2022,7 +2023,7 @@ void ShowFreq(int mode)
         tft.setTextColor(TFT_BLACK);
         tft.drawRightString(String(freqold), 248, 45, 7);
       }
-      tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+      tft.setTextColor(TFT_RED, TFT_BLACK);
       tft.drawRightString(String(freq), 248, 45, 7);
       freqold = freq;
       freqoldcount = count.length();
@@ -2049,7 +2050,7 @@ void ShowFreq(int mode)
         tft.print(freqold % 100);
       }
 
-      tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+      tft.setTextColor(TFT_RED, TFT_BLACK);
       if (mode == 0) {
         if (count.length() <= 2) {
           tft.setCursor (108, 45);
@@ -2112,7 +2113,7 @@ void ShowSignalLevel()
       tft.print(SNRold);
     }
     tft.setCursor (280, 168);
-    tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+    tft.setTextColor(TFT_SILVER, TFT_BLACK);
     if (tuned == true) {
       tft.print(SNR);
       SNRold = SNR;
@@ -2176,7 +2177,7 @@ void ShowSignalLevel()
       if (count.length() == 1) tft.print("0 ");
       if (count.length() == 2) tft.print(" ");
     }
-    tft.setTextColor(TFT_YELLOW, TFT_BLACK); //DSP
+    tft.setTextColor(TFT_SILVER, TFT_BLACK); //DSP
     if (SStatus < 0) tft.print("-");
     tft.print(abs(SStatus / 10));
     tft.setCursor (294, 110);
@@ -2368,23 +2369,23 @@ void ShowBW()
   unsigned long currentTime = millis();
   if (currentTime - lastRefreshTime >= 1000) {
     lastRefreshTime = currentTime;
-  
-  if (BW != BWOld || BWreset == true)
-  {
-    String BWString = String (BW, DEC);
-    String BWOldString = String (BWOld, DEC);
-    tft.setTextColor(TFT_BLACK);
-    tft.drawRightString(BWOldString, 218, 6, 4);
-    if (BWset == 0) {
-      tft.setTextColor(TFT_SKYBLUE);
-    } else {
-      tft.setTextColor(TFT_YELLOW);
+
+    if (BW != BWOld || BWreset == true)
+    {
+      String BWString = String (BW, DEC);
+      String BWOldString = String (BWOld, DEC);
+      tft.setTextColor(TFT_BLACK);
+      tft.drawRightString(BWOldString, 218, 6, 4);
+      if (BWset == 0) {
+        tft.setTextColor(TFT_SKYBLUE);
+      } else {
+        tft.setTextColor(TFT_SILVER);
+      }
+      tft.drawRightString(BWString, 218, 6, 4);
+      BWOld = BW;
+      BWreset = false;
     }
-    tft.drawRightString(BWString, 218, 6, 4);
-    BWOld = BW;
-    BWreset = false;
   }
-}
 }
 
 void ShowModLevel()
