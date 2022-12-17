@@ -555,9 +555,9 @@ void loop() {
     }
 
     if (SStatus / 10 > LowLevelSet && LowLevelInit == false && menu == false && band == 0) {
-      radio.clearRDS();
+      //radio.clearRDS();
       if (screenmute == false) {
-        tft.setTextColor(TFT_DARKGREY);
+        tft.setTextColor(TFT_SKYBLUE);
         tft.drawString("20", 20, 153, 1);
         tft.drawString("40", 50, 153, 1);
         tft.drawString("60", 80, 153, 1);
@@ -576,7 +576,7 @@ void loop() {
 
     if (SStatus / 10 <= LowLevelSet && band == 0) {
       if (LowLevelInit == true && menu == false) {
-        radio.clearRDS();
+        //radio.clearRDS();
         if (screenmute == false) {
           tft.fillRect(20, 139, 12, 8, TFT_GREYOUT);
           tft.fillRect(34, 139, 12, 8, TFT_GREYOUT);
@@ -752,18 +752,28 @@ void loop() {
     if (position < encoder.getPosition()) {
       if (rotarymode == 0) {
         KeyUp();
+          radio.clearRDS();
           tft.setTextColor(TFT_BLACK);
           tft.drawString(PSold, 38, 192, 4);
           tft.drawString(PIold, 244, 192, 4);
           tft.drawString(RTold, 6, 222, 2);
           tft.drawString(PTYold, 38, 168, 2);
+          PSold = "";
+          PTYold = "";
+          PIold = "";
+          RTold = "";
           } else {
         KeyDown();
+        radio.clearRDS();
           tft.setTextColor(TFT_BLACK);
           tft.drawString(PSold, 38, 192, 4);
           tft.drawString(PIold, 244, 192, 4);
           tft.drawString(RTold, 6, 222, 2);
           tft.drawString(PTYold, 38, 168, 2);
+          PSold = "";
+          PTYold = "";
+          PIold = "";
+          RTold = "";
       }
     }
 
@@ -775,6 +785,10 @@ void loop() {
           tft.drawString(PIold, 244, 192, 4);
           tft.drawString(RTold, 6, 222, 2);
           tft.drawString(PTYold, 38, 168, 2);
+          PSold = "";
+          PTYold = "";
+          PIold = "";
+          RTold = "";
       } else {
         KeyUp();
           tft.setTextColor(TFT_BLACK);
@@ -782,6 +796,10 @@ void loop() {
           tft.drawString(PIold, 244, 192, 4);
           tft.drawString(RTold, 6, 222, 2);
           tft.drawString(PTYold, 38, 168, 2);
+          PSold = "";
+          PTYold = "";
+          PIold = "";
+          RTold = "";
       }
     }
 
@@ -1744,15 +1762,24 @@ void readRds() {
     RDSstatus = radio.readRDS(rdsB, rdsC, rdsD, rdsErr);
     ShowRDSLogo(RDSstatus);
 
-/*    if (RDSstatus == 0) {
-      tft.setTextColor(TFT_WHITE);
+    if (RDSstatus == 0) {
+      tft.setTextColor(TFT_DARKGREY);
+      tft.drawString("PI:", 216, 195, 2);
+      tft.drawString("PS:", 6, 195, 2);
+      tft.drawString("PTY:", 6, 168, 2);
       tft.drawString(PIold, 244, 192, 4);
       tft.drawString(PSold, 38, 192, 4);
       tft.drawString(RTold, 6, 222, 2);
       tft.drawString(PTYold, 38, 168, 2);
       strcpy(programServicePrevious, " ");
       strcpy(radioIdPrevious, " ");
-    }*/
+    }
+    else {
+      tft.setTextColor(TFT_SKYBLUE);
+      tft.drawString("PI:", 216, 195, 2);
+      tft.drawString("PS:", 6, 195, 2);
+      tft.drawString("PTY:", 6, 168, 2);
+    }
 
     if (RDSstatus == 1 && USBstatus == true) {
       tft.setTextColor(TFT_BLACK);
@@ -1956,7 +1983,7 @@ void BuildDisplay()
         tft.fillRect(16 + (2 * segments), 117, 2, 3, TFT_GREEN);
     }
   }
-  tft.setTextColor(TFT_DARKGREY);
+  tft.setTextColor(TFT_SKYBLUE);
   tft.drawString("SQ:", 216, 155, 2);
   tft.drawString("S/N", 250, 168, 2);
   tft.drawString("dB",  300, 168, 2);
