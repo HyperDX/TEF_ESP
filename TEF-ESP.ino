@@ -113,6 +113,10 @@
         - Fixed problem when tuning beyond bandlimits on AM
         - FM level calibrated
         - Function added to choose between regular and optical rotary encoder (hold rotary button during boot)
+*** Modified by hdx ***
+  v1.16 - longer refresh rate for auto BW (lower battery drainage)
+        - RDS clearing only when frequency changed
+        - changed UI colors to be more visible
 ********************************************************************************
 
   Analog signalmeter:
@@ -189,7 +193,7 @@
 #include "TFT_Colors.h"
 TFT_eSPI tft = TFT_eSPI(320, 240);
 #else
-#define VERSION         "v1.15"
+#define VERSION         "v1.16"
 TFT_eSPI tft = TFT_eSPI(240, 320);
 #endif
 
@@ -574,11 +578,6 @@ void loop() {
       if (LowLevelInit == true && menu == false) {
         radio.clearRDS();
         if (screenmute == false) {
-          tft.setTextColor(TFT_BLACK);
-          tft.drawString(PSold, 38, 192, 4);
-          tft.drawString(PIold, 244, 192, 4);
-          tft.drawString(RTold, 6, 222, 2);
-          tft.drawString(PTYold, 38, 168, 2);
           tft.fillRect(20, 139, 12, 8, TFT_GREYOUT);
           tft.fillRect(34, 139, 12, 8, TFT_GREYOUT);
           tft.fillRect(48, 139, 12, 8, TFT_GREYOUT);
@@ -753,16 +752,36 @@ void loop() {
     if (position < encoder.getPosition()) {
       if (rotarymode == 0) {
         KeyUp();
-      } else {
+          tft.setTextColor(TFT_BLACK);
+          tft.drawString(PSold, 38, 192, 4);
+          tft.drawString(PIold, 244, 192, 4);
+          tft.drawString(RTold, 6, 222, 2);
+          tft.drawString(PTYold, 38, 168, 2);
+          } else {
         KeyDown();
+          tft.setTextColor(TFT_BLACK);
+          tft.drawString(PSold, 38, 192, 4);
+          tft.drawString(PIold, 244, 192, 4);
+          tft.drawString(RTold, 6, 222, 2);
+          tft.drawString(PTYold, 38, 168, 2);
       }
     }
 
     if (position > encoder.getPosition()) {
       if (rotarymode == 0) {
         KeyDown();
+          tft.setTextColor(TFT_BLACK);
+          tft.drawString(PSold, 38, 192, 4);
+          tft.drawString(PIold, 244, 192, 4);
+          tft.drawString(RTold, 6, 222, 2);
+          tft.drawString(PTYold, 38, 168, 2);
       } else {
         KeyUp();
+          tft.setTextColor(TFT_BLACK);
+          tft.drawString(PSold, 38, 192, 4);
+          tft.drawString(PIold, 244, 192, 4);
+          tft.drawString(RTold, 6, 222, 2);
+          tft.drawString(PTYold, 38, 168, 2);
       }
     }
 
@@ -1725,17 +1744,22 @@ void readRds() {
     RDSstatus = radio.readRDS(rdsB, rdsC, rdsD, rdsErr);
     ShowRDSLogo(RDSstatus);
 
-    if (RDSstatus == 0) {
-      tft.setTextColor(TFT_BLACK);
+/*    if (RDSstatus == 0) {
+      tft.setTextColor(TFT_WHITE);
       tft.drawString(PIold, 244, 192, 4);
       tft.drawString(PSold, 38, 192, 4);
       tft.drawString(RTold, 6, 222, 2);
       tft.drawString(PTYold, 38, 168, 2);
       strcpy(programServicePrevious, " ");
       strcpy(radioIdPrevious, " ");
-    }
+    }*/
 
     if (RDSstatus == 1 && USBstatus == true) {
+      tft.setTextColor(TFT_BLACK);
+      tft.drawString(PIold, 244, 192, 4);
+      tft.drawString(PSold, 38, 192, 4);
+      tft.drawString(RTold, 6, 222, 2);
+      tft.drawString(PTYold, 38, 168, 2);
       Serial.print("P");
       Serial.print(rdsInfo.programId);
       Serial.print("\nR");
