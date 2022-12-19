@@ -117,6 +117,9 @@
   v1.16 - longer refresh rate for auto BW (lower battery drainage)
         - RDS clearing only when frequency changed
         - changed UI colors to be more visible
+  v1.17 - changed signal unit to dBf (dBf=dBµV+11.25)
+        - changed USB icon
+        - when RDS data are not decoded RDS texts are grayed out
 ********************************************************************************
 
   Analog signalmeter:
@@ -189,11 +192,11 @@
 //#define ARS       // uncomment for BGR type display (ARS version)
 
 #ifdef ARS
-#define VERSION         "v1.15ARS"
+#define VERSION         "v1.17ARS"
 #include "TFT_Colors.h"
 TFT_eSPI tft = TFT_eSPI(320, 240);
 #else
-#define VERSION         "v1.16"
+#define VERSION         "v1.17"
 TFT_eSPI tft = TFT_eSPI(240, 320);
 #endif
 
@@ -2015,7 +2018,7 @@ void BuildDisplay()
     tft.drawString("kHz", 256, 78, 4);
   }
   tft.setTextColor(TFT_WHITE);
-  tft.drawString("dBuV", 280, 155, 2);
+  tft.drawString("dBf", 280, 155, 2);
   tft.drawPixel(295, 166, TFT_WHITE);
   tft.drawPixel(295, 167, TFT_WHITE);
   tft.drawPixel(295, 168, TFT_WHITE);
@@ -2213,12 +2216,13 @@ void ShowSignalLevel()
     if (SStatus < -400) {
       SStatus = -400;
     }
-    String count = String(abs(SStatus / 10), DEC);
+    int16_t myVal = SStatus + 112;
+    String count = String(abs(myVal / 10), DEC);
     tft.setTextColor(1, TFT_BLACK); //DSP; stupid compiler optimizes black/black away.
     tft.setCursor (213, 110);
     tft.setTextFont(6);
     // Using 'invisible' zero's to get the size 'right', ditto for spaces (half width,like '-' [alomost])
-    if (SStatus >= 0)
+    if (myVal >= 0)
     {
       if (count.length() == 1) tft.print("00");
       if (count.length() == 2) tft.print("0");
@@ -2229,15 +2233,15 @@ void ShowSignalLevel()
       if (count.length() == 2) tft.print(" ");
     }
     tft.setTextColor(TFT_SILVER, TFT_BLACK); //DSP
-    if (SStatus < 0) tft.print("-");
-    tft.print(abs(SStatus / 10));
+    if (myVal < 0) tft.print("-");
+    tft.print(abs(myVal / 10));
     tft.setCursor (294, 110);
     tft.setTextFont(4);
     tft.print(".");
-    if (SStatus < 0)
+    if (myVal < 0)
     {
-      String negative = String (SStatus % 10, DEC);
-      if (SStatus % 10 == 0)
+      String negative = String (myVal % 10, DEC);
+      if (myVal % 10 == 0)
       {
         tft.print("0");
       }
@@ -2246,7 +2250,7 @@ void ShowSignalLevel()
         tft.print(negative[1]);
       }
     } else {
-      tft.print(SStatus % 10);
+      tft.print(myVal % 10);
     }
 
     if (band == 0)
