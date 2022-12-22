@@ -463,13 +463,13 @@ void setup() {
     }
   }
 
-  if (digitalRead(PWRBUTTON) == LOW) {
+  if (digitalRead(PWRBUTTON) == HIGH) {
     analogWrite(SMETERPIN, 511);
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(TFT_WHITE);
     tft.drawCentreString("Calibrate analog meter", 150, 70, 4);
     tft.drawCentreString("Release button when ready", 150, 100, 4);
-    while (digitalRead(PWRBUTTON) == LOW) {
+    while (digitalRead(PWRBUTTON) == HIGH) {
       delay(50);
     }
     analogWrite(SMETERPIN, 0);
@@ -547,7 +547,7 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(PWRBUTTON) == LOW && USBstatus == false) {
+  if (digitalRead(PWRBUTTON) == HIGH && USBstatus == false) {
     PWRButtonPress();
   }
 
@@ -836,7 +836,7 @@ void PWRButtonPress() {
   if (menu == false) {
     unsigned long counterold = millis();
     unsigned long counter = millis();
-    while (digitalRead(PWRBUTTON) == LOW && counter - counterold <= 1000) {
+    while (digitalRead(PWRBUTTON) == HIGH && counter - counterold <= 1000) {
       counter = millis();
     }
     if (counter - counterold < 1000) {
@@ -864,7 +864,7 @@ void PWRButtonPress() {
         radio.power(1);
       }
     }
-    while (digitalRead(PWRBUTTON) == LOW) {
+    while (digitalRead(PWRBUTTON) == HIGH) {
       delay(50);
     }
     delay(100);
