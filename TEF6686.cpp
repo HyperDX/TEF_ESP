@@ -1,5 +1,5 @@
 #include "TEF6686.h"
-
+bool ProgramTP;
 const char* const ptyLUT[] = {
   "None",
   "News",
@@ -273,7 +273,13 @@ bool TEF6686::readRDS(uint16_t &rdsB, uint16_t &rdsC, uint16_t &rdsD, uint16_t &
     uint8_t programType = ((rdsBHigh & 3) << 3) | ((rdsBLow >> 5) & 7);
     strcpy(rdsProgramType, (programType >= 0 && programType < 32) ? ptyLUT[programType] : "    PTY ERROR   ");
   }
-
+  
+  if ((bitRead(rdsB, 4)) == 0 && ((bitRead(rdsB, 10)) == 1)) {
+    ProgramTP = true;
+  } else {
+    ProgramTP = false;
+  }
+  
   if (errA == 0) {
     char Hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
     rdsProgramId[0] = Hex[(rdsA & 0xF000U) >> 12];
