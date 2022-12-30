@@ -2462,10 +2462,13 @@ void BuildMenu2() {
   if (batteryPercentage < 20) {
     tft.setTextColor(TFT_RED);
   }
-
-  tft.drawString("Battery: " /*+ String(voltageLevel) + "V"*/, 20, 190, 2);
-  tft.drawString(String(voltageLevel) + "V", 20, 205, 2);
-  tft.drawString(String(batteryPercentage) + "%", 20, 220, 2);
+  tft.drawString("Battery:", 20, 190, 2);
+  if (voltageLevel > 0.5) {
+    tft.drawString(String(voltageLevel) + "V", 20, 205, 2);
+    tft.drawString(String(batteryPercentage) + "%", 20, 220, 2);
+   } else {
+    tft.drawString("NONE", 20, 205, 2);
+   }
 
   /* Menu 2 Wi-Fi network info */
   tft.setTextColor(SecondaryColor);
