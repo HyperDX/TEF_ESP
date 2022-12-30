@@ -113,10 +113,7 @@ char programServicePrevious[9];
 char programTypePrevious[17];
 char radioIdPrevious[4];
 char radioTextPrevious[65];
-float BatteryVoltage;
-int BatteryPercentage;
 int AGC;
-int BatteryLevel;
 int BWOld;
 int ConverterSet;
 int DeEmphasis;
@@ -146,6 +143,8 @@ int VolSet;
 int volume;
 int XDRBWset;
 int XDRBWsetold;
+
+// Theme Engine Colors
 int PrimaryColor;
 int SecondaryColor;
 int FrameColor;
@@ -155,9 +154,12 @@ int BackgroundColor;
 int ActiveColor;
 int OptimizerColor;
 int CurrentTheme;
+
+// Scrolling RT settings
 int xPos = 6;
 int yPos = 2;
 int charWidth = tft.textWidth("AA");
+
 uint16_t BW;
 uint16_t MStatus;
 int16_t OStatus;
@@ -172,13 +174,9 @@ String cryptedpassword;
 String HighCutLevelString;
 String HighCutOffsetString;
 String HighEdgeString;
-String hostname = "ESP32 TEF6686 FM Tuner";
 String LevelOffsetString;
 String LowEdgeString;
 String LowLevelString;
-String password = "12345";
-String salt;
-String saltkey = "                ";
 String PIold;
 String PSold;
 String PTYold;
@@ -189,6 +187,11 @@ String VolString;
 String XDRGTKShutdownString;
 String WiFiSwitchString;
 
+// Wi-Fi setup
+String hostname = "ESP32 TEF6686 FM Tuner";
+String password = "12345";
+String salt;
+String saltkey = "                ";
 const char* PARAM_INPUT_1 = "ssid";
 const char* PARAM_INPUT_2 = "pass";
 const char* PARAM_INPUT_3 = "ip";
@@ -231,10 +234,10 @@ unsigned long BWCLOCK = 0;
 unsigned long RTCLOCK = 0;
 unsigned long TPCLOCK = 0;
 
+// Battery calculation
 const int MAX_ANALOG_VAL = 4095;
 const float MIN_BATTERY_VOLTAGE = 3.15;
 const float MAX_BATTERY_VOLTAGE = 4.05;
-
 int rawValue = analogRead(BATTERYPIN);
 float voltageLevel = (rawValue / 4095.0) * 2 * 1.1 * 3.3 - 0.2;  // calculate voltage level
 float batteryFraction = (voltageLevel - MIN_BATTERY_VOLTAGE) / (MIN_BATTERY_VOLTAGE / MAX_BATTERY_VOLTAGE);
@@ -256,7 +259,6 @@ void initSPIFFS() {
  if (!SPIFFS.begin(true)) {
     Serial.println("An error has occurred while mounting SPIFFS");
   }
-  Serial.println("SPIFFS mounted successfully");
 }
 
 // Read File from SPIFFS
@@ -390,7 +392,7 @@ void setup() {
 
   rawValue = analogRead(BATTERYPIN);
   if(voltageLevel < 1.5) {
-    voltageLevel = voltageLevel * 3.45;
+    voltageLevel = voltageLevel * 3.6;
   }
   delay(50);
 
@@ -634,13 +636,6 @@ void setup() {
 }
 
 void loop() {
-  /*  BatteryLevel = analogRead(16);                          // GPIO13
-  BatteryPercentage = map(BatteryLevel, 0, 649, 0, 100);  //665 full usb, 649 full battery
-
-  if (BatteryLevel >= 649) {
-    BatteryPercentage = 100;
-  }
-*/
   if (digitalRead(PWRBUTTON) == HIGH && USBstatus == false) {
     PWRButtonPress();
   }
