@@ -2294,7 +2294,7 @@ void showPS() {
 }
 
 void showRadioText() {
-  if ((RDSstatus == 1) 
+  if (RDSstatus == 1) {
    if (millis() - RTCLOCK >= 350) {
     // Update the position of the text
     xPos -= charWidth;
