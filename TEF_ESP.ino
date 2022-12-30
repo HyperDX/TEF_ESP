@@ -409,7 +409,7 @@ void setup() {
   if (SignalUnits == 1) {
     SignalUnitsString = "dBf";
   } else {
-    SignalUnitsString = "dBuV";
+    SignalUnitsString = "dBμV";
   }
 
   if (RDSClear == 1) {
@@ -1285,7 +1285,7 @@ void ButtonPress() {
           if (SignalUnits == 1) {
             SignalUnitsString = "dBf";
           } else {
-            SignalUnitsString = "dBuV";
+            SignalUnitsString = "dμuV";
           }
           tft.setTextColor(PrimaryColor);
 
@@ -1419,7 +1419,7 @@ void ButtonPress() {
           tft.setTextColor(SecondaryColor);
           tft.drawCentreString("RF Level offset:", 150, 70, 4);
           tft.drawString("dB", 170, 110, 4);
-          tft.drawString("dBuV", 190, 157, 4);
+          tft.drawString("dμuV", 190, 157, 4);
           if (LevelOffset > 0) {
             LevelOffsetString = (String) "+" + LevelOffset, DEC;
           } else {
@@ -1435,7 +1435,7 @@ void ButtonPress() {
           tft.setTextColor(SecondaryColor);
           tft.drawCentreString("Stereo threshold:", 150, 70, 4);
           if (StereoLevel != 0) {
-            tft.drawString("dBuV", 170, 110, 4);
+            tft.drawString("dBμV", 170, 110, 4);
           }
           tft.setTextColor(PrimaryColor);
           if (StereoLevel != 0) {
@@ -1465,7 +1465,7 @@ void ButtonPress() {
           tft.setTextColor(SecondaryColor);
           tft.drawCentreString("Highcut threshold:", 150, 70, 4);
           if (HighCutOffset != 0) {
-            tft.drawString("dBuV", 170, 110, 4);
+            tft.drawString("dBμV", 170, 110, 4);
           }
           tft.setTextColor(PrimaryColor);
           if (HighCutOffset != 0) {
@@ -1479,7 +1479,7 @@ void ButtonPress() {
         case 190:
           tft.setTextColor(SecondaryColor);
           tft.drawCentreString("Low level threshold:", 150, 70, 4);
-          tft.drawString("dBuV", 150, 110, 4);
+          tft.drawString("dBμV", 150, 110, 4);
           tft.setTextColor(PrimaryColor);
           LowLevelString = String(LowLevelSet, DEC);
           tft.drawRightString(LowLevelString, 145, 110, 4);
@@ -1569,7 +1569,7 @@ void KeyUp() {
           tft.drawCentreString(SignalUnitsString, 150, 110, 4);
           if (SignalUnits == 1) {
             SignalUnits = 0;
-            SignalUnitsString = "dBuV";
+            SignalUnitsString = "dBμV";
 
           } else {
             SignalUnits = 1;
@@ -1751,10 +1751,10 @@ void KeyUp() {
           }
           tft.setTextColor(BackgroundColor);
           tft.drawRightString("Off", 165, 110, 4);
-          tft.drawString("dBuV", 170, 110, 4);
+          tft.drawString("dBμV", 170, 110, 4);
           tft.setTextColor(SecondaryColor);
           if (StereoLevel != 0) {
-            tft.drawString("dBuV", 170, 110, 4);
+            tft.drawString("dBμV", 170, 110, 4);
           }
           tft.setTextColor(PrimaryColor);
           tft.drawRightString(StereoLevelString, 165, 110, 4);
@@ -1794,10 +1794,10 @@ void KeyUp() {
           }
           tft.setTextColor(BackgroundColor);
           tft.drawRightString("Off", 165, 110, 4);
-          tft.drawString("dBuV", 170, 110, 4);
+          tft.drawString("dBμV", 170, 110, 4);
           tft.setTextColor(SecondaryColor);
           if (HighCutOffset != 0) {
-            tft.drawString("dBuV", 170, 110, 4);
+            tft.drawString("dBμV", 170, 110, 4);
           }
           tft.setTextColor(PrimaryColor);
           tft.drawRightString(HighCutOffsetString, 165, 110, 4);
@@ -1906,7 +1906,7 @@ void KeyDown() {
           tft.drawCentreString(SignalUnitsString, 150, 110, 4);
           if (SignalUnits == 1) {
             SignalUnits = 0;
-            SignalUnitsString = "dBuV";
+            SignalUnitsString = "dBμV";
           } else {
             SignalUnits = 1;
             SignalUnitsString = "dBf";
@@ -2090,10 +2090,10 @@ void KeyDown() {
           }
           tft.setTextColor(BackgroundColor);
           tft.drawRightString("Off", 165, 110, 4);
-          tft.drawString("dBuV", 170, 110, 4);
+          tft.drawString("dBμV", 170, 110, 4);
           tft.setTextColor(SecondaryColor);
           if (StereoLevel != 0) {
-            tft.drawString("dBuV", 170, 110, 4);
+            tft.drawString("dBμV", 170, 110, 4);
           }
           tft.setTextColor(PrimaryColor);
           tft.drawRightString(StereoLevelString, 165, 110, 4);
@@ -2134,10 +2134,10 @@ void KeyDown() {
           }
           tft.setTextColor(BackgroundColor);
           tft.drawRightString("Off", 165, 110, 4);
-          tft.drawString("dBuV", 170, 110, 4);
+          tft.drawString("dBμV", 170, 110, 4);
           tft.setTextColor(SecondaryColor);
           if (HighCutOffset != 0) {
-            tft.drawString("dBuV", 170, 110, 4);
+            tft.drawString("dBμV", 170, 110, 4);
           }
           tft.setTextColor(PrimaryColor);
           tft.drawRightString(HighCutOffsetString, 165, 110, 4);
@@ -2338,15 +2338,15 @@ void BuildMenu() {
   tft.drawRightString("MHz", 305, 90, 2);
   tft.drawRightString("dB", 305, 110, 2);
   if (StereoLevel != 0) {
-    tft.drawRightString("dBuV", 305, 130, 2);
+    tft.drawRightString("dBμV", 305, 130, 2);
   }
   if (HighCutLevel != 0) {
     tft.drawRightString("Hz", 305, 150, 2);
   }
   if (HighCutOffset != 0) {
-    tft.drawRightString("dBuV", 305, 170, 2);
+    tft.drawRightString("dBμV", 305, 170, 2);
   }
-  tft.drawRightString("dBuV", 305, 190, 2);
+  tft.drawRightString("dBμV", 305, 190, 2);
   tft.drawRightString("%", 305, 210, 2);
   tft.drawString("Set volume", 20, 30, 2);
   tft.drawString("Set converter offset", 20, 50, 2);
@@ -2426,7 +2426,7 @@ void BuildMenu2() {
   tft.drawLine(0, 23, 320, 23, FrameColor);
   tft.drawLine(0, 185, 320, 185, FrameColor);
   tft.setTextColor(PrimaryColor);
-  tft.drawString("PRESS MODE TO EXIT AND STORE", 20, 4, 2);
+  tft.drawString("PRESS MODE TO EXIT AND SAVE", 20, 4, 2);
   tft.setTextColor(SecondaryColor);
   tft.drawRightString(VERSION, 305, 4, 2);
   tft.drawRoundRect(10, menuoption, 300, 18, 5, SecondaryColor);
@@ -2636,7 +2636,7 @@ void BuildDisplay() {
   if (SignalUnits == 1) {
     tft.drawString("dBf", 280, 155, 2);
   } else {
-    tft.drawString("dBuV", 280, 155, 2);
+    tft.drawString("dBμV", 280, 155, 2);
     tft.drawPixel(295, 166, SecondaryColor);
     tft.drawPixel(295, 167, SecondaryColor);
     tft.drawPixel(295, 168, SecondaryColor);
