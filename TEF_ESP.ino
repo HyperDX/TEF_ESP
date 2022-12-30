@@ -3108,7 +3108,7 @@ void doSquelch() {
     if (seek == false && menu == false && menu2 == false && Squelch != Squelchold) {
       tft.setTextFont(2);
       tft.setTextColor(BackgroundColor);
-      tft.setCursor(216, 168);
+      tft.setCursor(239, 155);
       if (Squelchold == -100) {
         tft.print("OFF");
       } else if (Squelchold == 920) {
@@ -3117,7 +3117,7 @@ void doSquelch() {
         tft.print(Squelchold / 10);
       }
       tft.setTextColor(SecondaryColor);
-      tft.setCursor(216, 168);
+      tft.setCursor(239, 155);
       if (Squelch == -100) {
         tft.print("OFF");
       } else if (Squelch == 920) {
@@ -3151,14 +3151,14 @@ void doSquelch() {
         if (Squelch != Squelchold) {
           tft.setTextFont(2);
           tft.setTextColor(BackgroundColor);
-          tft.setCursor(216, 168);
+          tft.setCursor(239, 155);
           if (Squelchold == -1) {
             tft.print("ST");
           } else {
             tft.print(Squelchold / 10);
           }
           tft.setTextColor(SecondaryColor);
-          tft.setCursor(216, 168);
+          tft.setCursor(239, 155);
           if (Squelch == -1) {
             tft.print("ST");
           } else {
