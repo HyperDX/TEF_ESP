@@ -187,6 +187,12 @@ String VolString;
 String XDRGTKShutdownString;
 String WiFiSwitchString;
 
+// Extra settings strings
+const char* SignalUnitsStrings[] = {"dBuV", "dBf"};
+const char* RDSClearStrings[] = {"OFF", "ON"};
+const char* XDRGTKShutdownStrings[] = {"OFF", "ON"};
+const char* WiFiSwitchStrings[] = {"OFF", "ON"};
+
 // Wi-Fi setup
 String hostname = "ESP32 TEF6686 FM Tuner";
 String password = "12345";
@@ -241,7 +247,7 @@ const float MAX_BATTERY_VOLTAGE = 4.05;
 int rawValue = analogRead(BATTERYPIN);
 float voltageLevel = (rawValue / 4095.0) * 2 * 1.1 * 3.3 - 0.2;  // calculate voltage level
 float batteryFraction = (voltageLevel - MIN_BATTERY_VOLTAGE) / (MIN_BATTERY_VOLTAGE / MAX_BATTERY_VOLTAGE);
-int batteryPercentage = batteryFraction * 100;
+float batteryPercentage = batteryFraction * 100;
 
 // Wi-Fi Setup Webpage HTML Code
 const char index_html[] PROGMEM = "<!DOCTYPE html><html><head> <title>TEF6686 Wi-Fi Setup</title> <meta name='viewport' content='width=device-width, initial-scale=1'> <link rel='stylesheet' type='text/css' href='style.css'> <style> html { font-family: Arial, Helvetica, sans-serif;  display: inline-block;  text-align: center;}h1 { font-size: 1.8rem;  color: #252525;}.topnav {  overflow: hidden;  background-color: #00ea8f; }body {  margin: 0; background: #252525;}.content {  padding: 5%;}.card {  max-width: 800px;  margin: 0 auto;  background-color: white;  padding: 5px 5% 5px 5%;}input[type=submit] { color: #252525; background-color: #00ea8f; border: 3px solid #252525; cursor: pointer; font-weight: bold; padding: 15px 15px; text-align: center; text-decoration: none; font-size: 16px; width: 160px; margin-top: 20px; margin-bottom: 10px; border-radius: 8px; transition: .3s ease-in-out; }input[type=submit]:hover { background-color: #252525; border: 3px solid #00ea8f; color: #00ea8f;}input[type=text], input[type=number], select { width: 100%; padding: 12px 20px; border: 1px solid #ccc; box-sizing: border-box;}a { text-decoration: none; color: #00ea8f;}p { font-size: 14px; text-transform: uppercase;  text-align: left; margin: 0; margin-top: 15px;}.card p{ font-weight: bold;}.gateway-info{ text-transform: initial; text-align: center; color: white;} </style></head><body> <div class='topnav'> <h1>TEF6686 Wi-Fi SETUP</h1> </div> <div class='content'> <div class='card'> <form action='/' method='POST'> <p>SSID:</p> <input type='text' id ='ssid' name='ssid' placeholder='The exact name of your Wi-Fi network'><br> <p>Password:</p> <input type='text' id ='pass' name='pass' placeholder='Password to your Wi-Fi network'><br> <p>IP Address:</p> <input type='text' id ='ip' name='ip' placeholder='Example: 192.168.1.200'><br> <p>Gateway:</p> <input type='text' id ='gateway' name='gateway' placeholder='Example: 192.168.1.1'><br> <input type ='submit' value ='SUBMIT'> </form> </div> <p class='gateway-info'>If you're unsure, you can <a href='https://www.noip.com/support/knowledgebase/finding-your-default-gateway/' target='_blank'>look up how to get your gateway</a>.</p> </div></body></html>";
@@ -406,29 +412,10 @@ void setup() {
     }
   }
 
-  if (SignalUnits == 1) {
-    SignalUnitsString = "dBf";
-  } else {
-    SignalUnitsString = "dBuV";
-  }
-
-  if (RDSClear == 1) {
-    RDSClearString = "ON";
-  } else {
-    RDSClearString = "OFF";
-  }
-
-  if (XDRGTKShutdown == 1) {
-    XDRGTKShutdownString = "ON";
-  } else {
-    XDRGTKShutdownString = "OFF";
-  }
-
-  if (WiFiSwitch == 1) {
-    WiFiSwitchString = "ON";
-  } else {
-    WiFiSwitchString = "OFF";
-  }
+SignalUnitsString = SignalUnitsStrings[SignalUnits];
+RDSClearString = RDSClearStrings[RDSClear];
+XDRGTKShutdownString = XDRGTKShutdownStrings[XDRGTKShutdown];
+WiFiSwitchString = WiFiSwitchStrings[WiFiSwitch];
 
   if (iMSset == 1 && EQset == 1) {
     iMSEQ = 2;
@@ -578,15 +565,7 @@ void setup() {
   tft.fillRect(152, 180, 16, 6, GreyoutColor);
   tft.fillRect(184, 180, 16, 6, GreyoutColor);
 
-  if (lowByte(device) == 14) {
-    //    tft.drawString("Tuner: TEF6686 Lithio (" + String(version) + ")", 80, 65, 2);
-  } else if (lowByte(device) == 1) {
-    //    tft.drawString("Tuner: TEF6687 Lithio FMSI (" + String(version) + ")", 80, 65, 2);
-  } else if (lowByte(device) == 9) {
-    //    tft.drawString("Tuner: TEF6688 Lithio DR (" + String(version) + ")", 80, 65, 2);
-  } else if (lowByte(device) == 3) {
-    //    tft.drawString("Tuner: TEF6689 Lithio FMSI DR (" + String(version) + ")", 80, 65, 2);
-  } else {
+ if (lowByte(device) != 14 && lowByte(device) != 1 && lowByte(device) != 9 && lowByte(device) != 3) {
     tft.setTextColor(TFT_RED);
     tft.drawString("Tuner: !None!", 80, 65, 2);
     while (true)
@@ -3262,70 +3241,34 @@ void doBW() {
       BWset = 0;
     }
 
-    if (BWset == 1) {
-      radio.setFMBandw(56);
-    }
-    if (BWset == 2) {
-      radio.setFMBandw(64);
-    }
-    if (BWset == 3) {
-      radio.setFMBandw(72);
-    }
-    if (BWset == 4) {
-      radio.setFMBandw(84);
-    }
-    if (BWset == 5) {
-      radio.setFMBandw(97);
-    }
-    if (BWset == 6) {
-      radio.setFMBandw(114);
-    }
-    if (BWset == 7) {
-      radio.setFMBandw(133);
-    }
-    if (BWset == 8) {
-      radio.setFMBandw(151);
-    }
-    if (BWset == 9) {
-      radio.setFMBandw(168);
-    }
-    if (BWset == 10) {
-      radio.setFMBandw(184);
-    }
-    if (BWset == 11) {
-      radio.setFMBandw(200);
-    }
-    if (BWset == 12) {
-      radio.setFMBandw(217);
-    }
-    if (BWset == 13) {
-      radio.setFMBandw(236);
-    }
-    if (BWset == 14) {
-      radio.setFMBandw(254);
-    }
-    if (BWset == 15) {
-      radio.setFMBandw(287);
-    }
-    if (BWset == 16) {
-      radio.setFMBandw(311);
+switch(BWset) {
+      case 1: radio.setFMBandw(56); break;
+      case 2: radio.setFMBandw(64); break;
+      case 3: radio.setFMBandw(72); break;
+      case 4: radio.setFMBandw(84); break;
+      case 5: radio.setFMBandw(97); break;
+      case 6: radio.setFMBandw(114); break;
+      case 7: radio.setFMBandw(133); break;
+      case 8: radio.setFMBandw(151); break;
+      case 9: radio.setFMBandw(168); break;
+      case 10: radio.setFMBandw(184); break;
+      case 11: radio.setFMBandw(200); break;
+      case 12: radio.setFMBandw(217); break;
+      case 13: radio.setFMBandw(236); break;
+      case 14: radio.setFMBandw(254); break;
+      case 15: radio.setFMBandw(287); break;
+      case 16: radio.setFMBandw(311); break;
     }
   } else {
     if (BWset > 4) {
       BWset = 1;
     }
 
-    if (BWset == 1) {
-      radio.setAMBandw(3);
-    }
-    if (BWset == 2) {
-      radio.setAMBandw(4);
-    }
-    if (BWset == 3) {
-      radio.setAMBandw(6);
-    }
-    if (BWset == 4) {
-      radio.setAMBandw(8);
+    switch(BWset) {
+      case 1: radio.setFMBandw(3); break;
+      case 2: radio.setFMBandw(4); break;
+      case 3: radio.setFMBandw(6); break;
+      case 4: radio.setFMBandw(8); break;
     }
   }
   updateBW();
@@ -3494,56 +3437,25 @@ void XDRGTKRoutine() {
           if (XDRBWset < 0) {
             XDRBWsetold = XDRBWset;
             BWset = 0;
-          } else if (XDRBWset == 0) {
-            BWset = 1;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 1) {
-            BWset = 2;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 2) {
-            BWset = 3;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 3) {
-            BWset = 4;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 4) {
-            BWset = 5;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 5) {
-            BWset = 6;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 6) {
-            BWset = 7;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 7) {
-            BWset = 8;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 8) {
-            BWset = 9;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 9) {
-            BWset = 10;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 10) {
-            BWset = 11;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 11) {
-            BWset = 12;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 12) {
-            BWset = 13;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 13) {
-            BWset = 14;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 14) {
-            BWset = 15;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 15) {
-            BWset = 16;
-            XDRBWsetold = XDRBWset;
-          } else {
-            XDRBWset = XDRBWsetold;
+          }
+                    switch(XDRBWset) {
+            case 0: XDRBWsetold = XDRBWset; BWset = 1; break;
+            case 1: XDRBWsetold = XDRBWset; BWset = 2; break;
+            case 2: XDRBWsetold = XDRBWset; BWset = 3; break;
+            case 3: XDRBWsetold = XDRBWset; BWset = 4; break;
+            case 4: XDRBWsetold = XDRBWset; BWset = 5; break;
+            case 5: XDRBWsetold = XDRBWset; BWset = 6; break;
+            case 6: XDRBWsetold = XDRBWset; BWset = 7; break;
+            case 7: XDRBWsetold = XDRBWset; BWset = 8; break;
+            case 8: XDRBWsetold = XDRBWset; BWset = 9; break;
+            case 9: XDRBWsetold = XDRBWset; BWset = 10; break;
+            case 10: XDRBWsetold = XDRBWset; BWset = 11; break;
+            case 11: XDRBWsetold = XDRBWset; BWset = 12; break;
+            case 12: XDRBWsetold = XDRBWset; BWset = 13; break;
+            case 13: XDRBWsetold = XDRBWset; BWset = 14; break;
+            case 14: XDRBWsetold = XDRBWset; BWset = 15; break;
+            case 15: XDRBWsetold = XDRBWset; BWset = 16; break;
+            default: XDRBWset = XDRBWsetold; break;
           }
           doBW();
           Serial.print(XDRBWset);
@@ -3642,40 +3554,25 @@ void XDRGTKRoutine() {
             frequencyold = radio.getFrequency();
             radio.setFrequency(scanner_start, 65, 108);
             Serial.print('U');
-            if (scanner_filter < 0) {
-              BWset = 0;
-            } else if (scanner_filter == 0) {
-              BWset = 1;
-            } else if (scanner_filter == 26) {
-              BWset = 2;
-            } else if (scanner_filter == 1) {
-              BWset = 3;
-            } else if (scanner_filter == 28) {
-              BWset = 4;
-            } else if (scanner_filter == 29) {
-              BWset = 5;
-            } else if (scanner_filter == 3) {
-              BWset = 6;
-            } else if (scanner_filter == 4) {
-              BWset = 7;
-            } else if (scanner_filter == 5) {
-              BWset = 8;
-            } else if (scanner_filter == 7) {
-              BWset = 9;
-            } else if (scanner_filter == 8) {
-              BWset = 10;
-            } else if (scanner_filter == 9) {
-              BWset = 11;
-            } else if (scanner_filter == 10) {
-              BWset = 12;
-            } else if (scanner_filter == 11) {
-              BWset = 13;
-            } else if (scanner_filter == 12) {
-              BWset = 14;
-            } else if (scanner_filter == 13) {
-              BWset = 15;
-            } else if (scanner_filter == 15) {
-              BWset = 16;
+              switch (scanner_filter) {
+                case -1: BWset = 0; break;
+                case 0: BWset = 1; break;
+                case 26: BWset = 2; break;
+                case 1: BWset = 3; break;
+                case 28: BWset = 4; break;
+                case 29: BWset = 5; break;
+                case 3: BWset = 6; break;
+                case 4: BWset = 7; break;
+                case 5: BWset = 8; break;
+                case 7: BWset = 9; break;
+                case 8: BWset = 10; break;
+                case 9: BWset = 11; break;
+                case 10: BWset = 12; break;
+                case 11: BWset = 13; break;
+                case 12: BWset = 14; break;
+                case 13: BWset = 15; break;
+                case 15: BWset = 16; break;
+                default: BWset = 0; break;
             }
             doBW();
             if (screenmute == false) {
@@ -3906,56 +3803,25 @@ void XDRGTKWiFi() {
           if (XDRBWset < 0) {
             XDRBWsetold = XDRBWset;
             BWset = 0;
-          } else if (XDRBWset == 0) {
-            BWset = 1;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 1) {
-            BWset = 2;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 2) {
-            BWset = 3;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 3) {
-            BWset = 4;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 4) {
-            BWset = 5;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 5) {
-            BWset = 6;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 6) {
-            BWset = 7;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 7) {
-            BWset = 8;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 8) {
-            BWset = 9;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 9) {
-            BWset = 10;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 10) {
-            BWset = 11;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 11) {
-            BWset = 12;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 12) {
-            BWset = 13;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 13) {
-            BWset = 14;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 14) {
-            BWset = 15;
-            XDRBWsetold = XDRBWset;
-          } else if (XDRBWset == 15) {
-            BWset = 16;
-            XDRBWsetold = XDRBWset;
-          } else {
-            XDRBWset = XDRBWsetold;
+          switch(XDRBWset) {
+            case 0: XDRBWsetold = XDRBWset; BWset = 1; break;
+            case 1: XDRBWsetold = XDRBWset; BWset = 2; break;
+            case 2: XDRBWsetold = XDRBWset; BWset = 3; break;
+            case 3: XDRBWsetold = XDRBWset; BWset = 4; break;
+            case 4: XDRBWsetold = XDRBWset; BWset = 5; break;
+            case 5: XDRBWsetold = XDRBWset; BWset = 6; break;
+            case 6: XDRBWsetold = XDRBWset; BWset = 7; break;
+            case 7: XDRBWsetold = XDRBWset; BWset = 8; break;
+            case 8: XDRBWsetold = XDRBWset; BWset = 9; break;
+            case 9: XDRBWsetold = XDRBWset; BWset = 10; break;
+            case 10: XDRBWsetold = XDRBWset; BWset = 11; break;
+            case 11: XDRBWsetold = XDRBWset; BWset = 12; break;
+            case 12: XDRBWsetold = XDRBWset; BWset = 13; break;
+            case 13: XDRBWsetold = XDRBWset; BWset = 14; break;
+            case 14: XDRBWsetold = XDRBWset; BWset = 15; break;
+            case 15: XDRBWsetold = XDRBWset; BWset = 16; break;
+            default: XDRBWset = XDRBWsetold; break;
+          }
           }
           doBW();
           RemoteClient.print(XDRBWset);
@@ -4054,40 +3920,25 @@ void XDRGTKWiFi() {
             frequencyold = radio.getFrequency();
             radio.setFrequency(scanner_start, 65, 108);
             RemoteClient.print('U');
-            if (scanner_filter < 0) {
-              BWset = 0;
-            } else if (scanner_filter == 0) {
-              BWset = 1;
-            } else if (scanner_filter == 26) {
-              BWset = 2;
-            } else if (scanner_filter == 1) {
-              BWset = 3;
-            } else if (scanner_filter == 28) {
-              BWset = 4;
-            } else if (scanner_filter == 29) {
-              BWset = 5;
-            } else if (scanner_filter == 3) {
-              BWset = 6;
-            } else if (scanner_filter == 4) {
-              BWset = 7;
-            } else if (scanner_filter == 5) {
-              BWset = 8;
-            } else if (scanner_filter == 7) {
-              BWset = 9;
-            } else if (scanner_filter == 8) {
-              BWset = 10;
-            } else if (scanner_filter == 9) {
-              BWset = 11;
-            } else if (scanner_filter == 10) {
-              BWset = 12;
-            } else if (scanner_filter == 11) {
-              BWset = 13;
-            } else if (scanner_filter == 12) {
-              BWset = 14;
-            } else if (scanner_filter == 13) {
-              BWset = 15;
-            } else if (scanner_filter == 15) {
-              BWset = 16;
+            switch (scanner_filter) {
+                case -1: BWset = 0; break;
+                case 0: BWset = 1; break;
+                case 26: BWset = 2; break;
+                case 1: BWset = 3; break;
+                case 28: BWset = 4; break;
+                case 29: BWset = 5; break;
+                case 3: BWset = 6; break;
+                case 4: BWset = 7; break;
+                case 5: BWset = 8; break;
+                case 7: BWset = 9; break;
+                case 8: BWset = 10; break;
+                case 9: BWset = 11; break;
+                case 10: BWset = 12; break;
+                case 11: BWset = 13; break;
+                case 12: BWset = 14; break;
+                case 13: BWset = 15; break;
+                case 15: BWset = 16; break;
+                default: BWset = 0; break;
             }
             doBW();
             if (screenmute == false) {
