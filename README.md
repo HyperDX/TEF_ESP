@@ -16,6 +16,7 @@ More info: https://www.pe5pvb.nl/tef6686/
 ## TO DO
 - battery level indicator (with instructions of connecting)
 - add photos of working tuner
+- LW/MW/SW bandplan
 
 ## Instalation
 **Recommended method:** You can download already compiled software and upload it using prepared script from release page. Instructions are included in the archive.
