@@ -12,8 +12,8 @@ Forked from: https://github.com/NoobishSVK/TEF6686-remastered
 */
 
 
-#include "TEF6686.h"
-#include "constants.h"
+#include "src/TEF6686.h"
+#include "src/constants.h"
 #include <EEPROM.h>
 #include <Wire.h>
 #include "SPIFFS.h"
