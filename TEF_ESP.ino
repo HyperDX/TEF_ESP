@@ -41,11 +41,11 @@ Forked from: https://github.com/NoobishSVK/TEF6686-remastered
 //#define ARS       // uncomment for BGR type display (ARS version)
 
 #ifdef ARS
-#define VERSION "v1.21.2ARS"
+#define VERSION "v1.21.3ARS"
 #include "TFT_Colors.h"
 TFT_eSPI tft = TFT_eSPI(320, 240);
 #else
-#define VERSION "v1.21.2"
+#define VERSION "v1.21.3"
 TFT_eSPI tft = TFT_eSPI(240, 320);
 #endif
 
