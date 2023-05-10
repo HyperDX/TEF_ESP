@@ -1,4 +1,7 @@
 # TEF_ESP
+
+**Work on the software is temporarily suspended.**
+
 A continuation of Sjef's (PE5PVB) project called TEF6686_ESP32-v1.
 
 This software is designed for tuners based on original PE5PVB board.
