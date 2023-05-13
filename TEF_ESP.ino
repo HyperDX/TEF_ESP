@@ -512,13 +512,13 @@ WiFiSwitchString = WiFiSwitchStrings[WiFiSwitch];
     }
   }
 
-if (digitalRead(PWRBUTTON) == HIGH) {
+if (digitalRead(PWRBUTTON) == LOW) {
     analogWrite(SMETERPIN, 511);
     tft.fillScreen(BackgroundColor);
     tft.setTextColor(SecondaryColor);
     tft.drawCentreString("Calibrate analog meter", 150, 70, 4);
     tft.drawCentreString("Release button when ready", 150, 100, 4);
-  while (digitalRead(PWRBUTTON) == HIGH) {
+  while (digitalRead(PWRBUTTON) == LOW) {
       delay(50);
     }
     analogWrite(SMETERPIN, 0);
@@ -907,7 +907,7 @@ void PWRButtonPress() {
   if (menu == false && menu2 == false) {
     unsigned long counterold = millis();
     unsigned long counter = millis();
-    while (digitalRead(PWRBUTTON) == HIGH && counter - counterold <= 1000) {
+    while (digitalRead(PWRBUTTON) == LOW && counter - counterold <= 1000) {
       counter = millis();
     }
     if (counter - counterold < 1000) {
@@ -930,7 +930,7 @@ void PWRButtonPress() {
         menu2 = true;
       }
     }
-    while (digitalRead(PWRBUTTON) == HIGH) {
+    while (digitalRead(PWRBUTTON) == LOW) {
       delay(50);
     }
     delay(100);
