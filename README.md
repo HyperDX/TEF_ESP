@@ -24,7 +24,7 @@ More info: https://www.pe5pvb.nl/tef6686/
 ## Instalation
 **Recommended method:** You can download already compiled software and upload it using prepared script from release page. Instructions are included in the archive.
 
-**Alternative method:** You can download source code from release page or using git. Then compile and upload it using for example Arduino IDE. **Important** you need to fill your TEF_eSPI.h file (probably located in Arduino/libraries/TFT_eSPI folder) with these values:
+**Alternative method:** You can download source code from release page or using git. Then compile and upload it using for example Arduino IDE. **Important** you need to fill your User_Setup.h file (probably located in Arduino/libraries/TFT_eSPI folder) with these values:
 ```
 #define ILI9341_DRIVER
 #define TFT_CS          5
